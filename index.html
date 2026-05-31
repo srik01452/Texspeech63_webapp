@@ -1,51 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TecSpeech</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecSpeech - Tamil Text to Speech & PDF Reader</title>
+    <!-- FontAwesome for Dashboard Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-dark: #0f172a;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover { background-color: var(--primary-hover); }
+        .btn-secondary { background-color: transparent; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-secondary:hover { background-color: #f1f5f9; }
+        .btn-danger { background-color: #ef4444; }
+        .btn-danger:hover { background-color: #dc2626; }
+        .btn-google { background-color: white; color: #444; border: 1px solid var(--border); width: 100%; justify-content: center; margin-top: 0.75rem; }
+        .btn-google:hover { background-color: #f8fafc; }
+
+        /* App Sections Container */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 { font-size: 3rem; color: var(--bg-dark); margin-bottom: 1.5rem; line-height: 1.2; }
+        .hero p { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2rem; }
+
+        /* Feature Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .feature-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .feature-card h3 { margin-bottom: 0.5rem; }
+        .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* Dashboard Interface Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container { grid-template-columns: 1fr; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card h2 { font-size: 1.25rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            resize: none;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            outline-color: var(--primary);
+        }
+
+        .btn-group { display: flex; gap: 1rem; }
+
+        /* Drag & Drop File Upload Component */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            padding: 3rem 1rem;
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            background: #fbfcfe;
+        }
+
+        .upload-zone:hover { border-color: var(--primary); }
+        .upload-zone i { font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+        /* Integrated Web Audio Player */
+        .audio-player {
+            grid-column: 1 / -1;
+            background: var(--bg-dark);
+            color: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .audio-player { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+
+        .player-controls { display: flex; align-items: center; gap: 1rem; }
+        .player-progress { flex: 1; display: flex; align-items: center; gap: 1rem; width: 100%; }
+        
+        input[type="range"] {
+            flex: 1;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Auth Modals UI */
+        .auth-container {
+            max-width: 400px;
+            margin: 4rem auto;
+        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius); outline-color: var(--primary); }
+        .auth-toggle { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted); }
+        .auth-toggle span { color: var(--primary); cursor: pointer; font-weight: 600; }
+
+        /* Premium Pricing Matrix Table */
+        .pricing-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: stretch;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .price-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            width: 320px;
+            text-align: center;
+            position: relative;
+        }
+        .price-card.premium { border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(37,99,235,0.1); }
+        .badge { position: absolute; top: 1rem; right: 1rem; background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+        .price { font-size: 2.5rem; font-weight: 800; color: var(--bg-dark); margin: 1rem 0; }
+        .price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); }
+        .price-features { list-style: none; margin: 2rem 0; text-align: left; display: flex; flex-direction: column; gap: 0.75rem; }
+        .price-features li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
+        .price-features li i { color: #10b981; }
+
+        /* Contact View */
+        .contact-container { max-width: 600px; margin: 0 auto; }
+
+        /* Footer */
+        footer {
+            background: var(--bg-dark);
+            color: #94a3b8;
+            text-align: center;
+            padding: 2rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <h1>TecSpeech</h1>
-  <p>Convert Tamil Text & PDFs into Speech</p>
-</header>
+    <header>
+        <div class="nav-container">
+            <a onclick="showSection('home')" class="logo"><i class="fa-solid fa-wand-magic-sparkles"></i> TecSpeech</a>
+            <nav>
+                <ul>
+                    <li><a onclick="showSection('home')" id="nav-home" class="active">Home</a></li>
+                    <li><a onclick="showSection('tts')" id="nav-tts">Dashboard</a></li>
+                    <li><a onclick="showSection('premium')" id="nav-premium">Premium</a></li>
+                    <li><a onclick="showSection('contact')" id="nav-contact">Contact</a></li>
+                    <li><button onclick="showSection('login')" class="btn btn-secondary" id="nav-login"><i class="fa-solid fa-user"></i> Login</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<section class="hero">
-  <h2>Learn Smarter with Audio</h2>
-  <p>Upload PDFs or enter text and listen anywhere.</p>
-</section>
+    <main>
+        <!-- HOME PAGE / LANDING SECTON -->
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <h1>Transform Tamil Text & Documents into Natural Speech</h1>
+                <p>An elegant, high-fidelity English-interface tool engineered to process typed Tamil characters or document extractions with instant playback.</p>
+                <button onclick="showSection('tts')" class="btn">Get Started For Free <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fa-solid fa-keyboard"></i>
+                    <h3>Tamil Input Native Support</h3>
+                    <p>Paste, type, or enter classical and modern Tamil scripts cleanly without system encoding breaks.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <h3>Document PDF Extraction</h3>
+                    <p>Upload multi-page PDFs to strip text layers dynamically and pipe data into the engine cleanly.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-volume-high"></i>
+                    <h3>High Fidelity Playback</h3>
+                    <p>Control processing loops using an integrated media controller UI featuring a true scrubbing progress monitor.</p>
+                </div>
+            </div>
+        </section>
 
-<section class="converter">
-  <h3>Text to Speech</h3>
+        <!-- DASHBOARD (TEXT TO SPEECH & PDF UPLOAD) -->
+        <section id="tts" class="page-section">
+            <div class="dashboard-container">
+                <!-- Text Input Module -->
+                <div class="card">
+                    <h2><i class="fa-solid fa-pen-to-square" style="color: var(--primary)"></i> Tamil Text Input</h2>
+                    <textarea id="tamil-text" placeholder="இங்கு தமிழ் உரையை தட்டச்சு செய்யவும் அல்லது ஒட்டவும்... (Type or paste Tamil text here)"></textarea>
+                    <div class="btn-group">
+                        <button class="btn" onclick="simulateAction('Processing Text Synthesis...')"><i class="fa-solid fa-play"></i> Speak</button>
+                        <button class="btn btn-secondary btn-danger" style="color: white; border: none;" onclick="simulateAction('Playback Terminated.')"><i class="fa-solid fa-stop"></i> Stop</button>
+                    </div>
+                </div>
 
-  <textarea id="textInput" placeholder="Paste Tamil text here..."></textarea>
+                <!-- PDF Processing Module -->
+                <div class="card">
+                    <h2><i class="fa-solid fa-file-arrow-up" style="color: #10b981;"></i> PDF Document Processing</h2>
+                    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                        <input type="file" id="file-input" accept=".pdf" style="display: none;" onchange="handleFile(this)">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <h3 id="upload-status">Drop PDF here or click to browse</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Accepts structured data up to 10MB</p>
+                    </div>
+                </div>
 
-  <input type="file" id="pdfFile" accept=".pdf">
+                <!-- Shared Application Audio Engine Dashboard Component -->
+                <div class="audio-player">
+                    <div class="player-controls">
+                        <button class="btn" style="background: transparent; font-size: 1.25rem; padding: 0.5rem;" onclick="togglePlay()"><i class="fa-solid fa-play" id="play-icon"></i></button>
+                    </div>
+                    <div class="player-progress">
+                        <span style="font-size: 0.85rem;" id="time-current">0:00</span>
+                        <input type="range" id="audio-seek" value="0" min="0" max="100" onchange="seekAudio(this.value)">
+                        <span style="font-size: 0.85rem;" id="time-total">0:00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <div class="buttons">
-    <button onclick="convertSpeech()">🔊 Speak</button>
-    <button onclick="stopSpeech()">⏹ Stop</button>
-  </div>
-</section>
+        <!-- PREMIUM TIERS / COMPARISON MATRIX -->
+        <section id="premium" class="page-section">
+            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">Simple, Transparent Pricing</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Unlock expanded parsing architectures and deep generation limits.</p>
+            <div class="pricing-container">
+                <div class="price-card">
+                    <h3>Free Plan</h3>
+                    <div class="price">$0<span>/ month</span></div>
+                    <ul class="price-features">
+                        <li><i class="fa-solid fa-check"></i> Standard Tamil Synthesis</li>
+                        <li><i class="fa-solid fa-check"></i> 5,000 Character Limit / run</li>
+                        <li><i class="fa-solid fa-check"></i> 3 PDF Uploads / day</li>
+                        <li style="color: var(--text-muted);"><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> HD WaveNet Voices</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="width: 100%;" onclick="showSection('tts')">Current Tier</button>
+                </div>
+                <div class="price-card premium">
+                    <div class="badge">POPULAR</div>
+                    <h3>Premium Plan</h3>
+                    <div class="price">$9<span>/ month</span></div>
+                    <ul class="price-features">
+                        <li><i class="fa-solid fa-check"></i> Ultra-Realistic Neural Voices</li>
+                        <li><i class="fa-solid fa-check"></i> Unlimited Character Windows</li>
+                        <li><i class="fa-solid fa-check"></i> Uncapped PDF Document Extractions</li>
+                        <li><i class="fa-solid fa-check"></i> Offline Audio Track Downloads</li>
+                    </ul>
+                    <button class="btn" style="width: 100%;" onclick="simulateAction('Redirecting to checkout processing sequence...')">Upgrade to Premium</button>
+                </div>
+            </div>
+        </section>
 
-<section class="features">
-  <h3>Features</h3>
-  <ul>
-    <li>PDF Upload</li>
-    <li>Text to Speech</li>
-    <li>Mobile Friendly</li>
-    <li>English Interface</li>
-    <li>Free to Use</li>
-  </ul>
-</section>
+        <!-- CONTACT PAGE INTERFACE -->
+        <section id="contact" class="page-section">
+            <div class="card contact-container">
+                <h2><i class="fa-solid fa-envelope" style="color: var(--primary)"></i> Send Feedback & Requests</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Have questions about our Tamil natural speech synthesizer rendering engine? Reach us direct at <strong>support@tecspeech.io</strong> or fill out the dashboard wireframe down below.</p>
+                <form onsubmit="event.preventDefault(); simulateAction('Feedback received. Thank you!');">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" placeholder="you@domain.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Message</label>
+                        <textarea style="height: 120px; margin-bottom: 0;" placeholder="Provide systemic input parameters or errors..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%; justify-content: center; margin-top: 1rem;">Submit Report</button>
+                </form>
+            </div>
+        </section>
 
-<footer>
-  <p>© 2026 TecSpeech</p>
-</footer>
+        <!-- ACCOUNT GATEWAY (LOGIN / REGISTER CONFIG) -->
+        <section id="login" class="page-section auth-container">
+            <div class="card" id="auth-card">
+                <h2 id="auth-title" style="justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem;">Access Your Account</h2>
+                <form onsubmit="event.preventDefault(); simulateAction('User authentication loop successful.'); showSection('tts');">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" placeholder="name@domain.com" required>
+                    </div>
+                    <div class="form-group" id="password-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%; justify-content: center;" id="auth-submit-btn">Login with Email</button>
+                </form>
+                <button class="btn btn-google" onclick="simulateAction('Redirecting to Google Secure Identity Provider...')">
+                    <i class="fa-brands fa-google" style="color: #ea4335;"></i> Sign in with Google
+                </button>
+                <p class="auth-toggle" id="auth-switcher">Don't have an account? <span onclick="toggleAuthMode()">Register Now</span></p>
+            </div>
+        </section>
+    </main>
 
-<script src="script.js"></script>
-</body>
-</html>
+    <footer>
+        <p>&copy; 2026 TecSpeech Engine Integration System. Modern, responsive application layout hosted on GitHub.</p>
+    </footer>
+
+    <!-- Interactivity Engine Client Scripts -->
+    <script>
+        // State engine configurations
+        let isPlaying = false;
+        let isLoginMode = true;
+
+        // Clean router navigation layout handling logic
+        function showSection(sectionId) {
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            const targetedNavLink = document.getElementById(`nav-${sectionId}`);
+            if(targetedNavLink) targetedNavLink.classList.add('active');
+            
+            window.scrollTo(0,0);
+        }
+
+        // Simulating background system loops dynamically
+        functio
