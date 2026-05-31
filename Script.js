@@ -1,10 +1,32 @@
 function convertSpeech() {
-    alert("Button clicked!");
-
     const text = document.getElementById("textInput").value;
 
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
+    if (!text.trim()) {
+        alert("Please enter some text.");
+        return;
+    }
 
-    window.speechSynthesis.speak(speech);
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    const voices = speechSynthesis.getVoices();
+
+    const tamilVoice = voices.find(
+        voice => voice.lang.includes("ta")
+    );
+
+    if (tamilVoice) {
+        utterance.voice = tamilVoice;
+    }
+
+    utterance.lang = "ta-IN";
+
+    speechSynthesis.speak(utterance);
 }
+
+function stopSpeech() {
+    speechSynthesis.cancel();
+}
+
+window.speechSynthesis.onvoiceschanged = () => {
+    speechSynthesis.getVoices();
+};
