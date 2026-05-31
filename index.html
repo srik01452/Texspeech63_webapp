@@ -9,24 +9,42 @@
 <body>
 
 <header>
-<h1>TecSpeech</h1>
-<p>Convert Tamil Text & PDF into Natural Tamil Audio</p>
+  <h1>TecSpeech</h1>
+  <p>Convert Tamil Text & PDFs into Speech</p>
 </header>
 
-<section class="container">
-
-<textarea id="textInput"
-placeholder="Enter Tamil text here..."></textarea>
-
-<input type="file" accept=".pdf">
-
-<button onclick="convertSpeech()">
-Convert to Speech
-</button>
-
-<audio id="audioPlayer" controls></audio>
-
+<section class="hero">
+  <h2>Learn Smarter with Audio</h2>
+  <p>Upload PDFs or enter text and listen anywhere.</p>
 </section>
+
+<section class="converter">
+  <h3>Text to Speech</h3>
+
+  <textarea id="textInput" placeholder="Paste Tamil text here..."></textarea>
+
+  <input type="file" id="pdfFile" accept=".pdf">
+
+  <div class="buttons">
+    <button onclick="convertSpeech()">🔊 Speak</button>
+    <button onclick="stopSpeech()">⏹ Stop</button>
+  </div>
+</section>
+
+<section class="features">
+  <h3>Features</h3>
+  <ul>
+    <li>PDF Upload</li>
+    <li>Text to Speech</li>
+    <li>Mobile Friendly</li>
+    <li>English Interface</li>
+    <li>Free to Use</li>
+  </ul>
+</section>
+
+<footer>
+  <p>© 2026 TecSpeech</p>
+</footer>
 
 <script src="script.js"></script>
 </body>
