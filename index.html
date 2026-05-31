@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TecSpeech - Tamil Text to Speech & PDF Reader</title>
-    <!-- FontAwesome for Dashboard Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -292,7 +291,6 @@
     </header>
 
     <main>
-        <!-- HOME PAGE / LANDING SECTION -->
         <section id="home" class="page-section active">
             <div class="hero">
                 <h1>Transform Tamil Text & Documents into Natural Speech</h1>
@@ -318,10 +316,8 @@
             </div>
         </section>
 
-        <!-- DASHBOARD (TEXT TO SPEECH & PDF UPLOAD) -->
         <section id="tts" class="page-section">
             <div class="dashboard-container">
-                <!-- Text Input Module -->
                 <div class="card">
                     <h2><i class="fa-solid fa-pen-to-square" style="color: var(--primary)"></i> Tamil Text Input</h2>
                     <textarea id="tamil-text" placeholder="இங்கு தமிழ் உரையை தட்டச்சு செய்யவும் அல்லது ஒட்டவும்... (Type or paste Tamil text here)"></textarea>
@@ -331,7 +327,6 @@
                     </div>
                 </div>
 
-                <!-- PDF Processing Module -->
                 <div class="card">
                     <h2><i class="fa-solid fa-file-arrow-up" style="color: #10b981;"></i> PDF Document Processing</h2>
                     <div class="upload-zone" id="drop-zone">
@@ -342,7 +337,6 @@
                     </div>
                 </div>
 
-                <!-- Shared Application Audio Engine Dashboard Component -->
                 <div class="audio-player">
                     <div class="player-controls">
                         <button class="btn" style="background: transparent; font-size: 1.25rem; padding: 0.5rem;" id="btn-audio-toggle"><i class="fa-solid fa-play" id="play-icon"></i></button>
@@ -356,7 +350,6 @@
             </div>
         </section>
 
-        <!-- PREMIUM TIERS / COMPARISON MATRIX -->
         <section id="premium" class="page-section">
             <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">Simple, Transparent Pricing</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Unlock expanded parsing architectures and deep generation limits.</p>
@@ -387,7 +380,6 @@
             </div>
         </section>
 
-        <!-- CONTACT PAGE INTERFACE -->
         <section id="contact" class="page-section">
             <div class="card contact-container">
                 <h2><i class="fa-solid fa-envelope" style="color: var(--primary)"></i> Send Feedback & Requests</h2>
@@ -406,10 +398,9 @@
             </div>
         </section>
 
-        <!-- ACCOUNT GATEWAY (LOGIN / REGISTER CONFIG) -->
         <section id="login" class="page-section auth-container">
             <div class="card" id="auth-card">
-                <h2 id="auth-title" style="justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem;">Access Your Account</h2>
+                <h2 id="auth-title" style="text-align: center; font-size: 1.5rem; margin-bottom: 1.5rem;">Access Your Account</h2>
                 <form id="auth-form">
                     <div class="form-group">
                         <label>Email Address</label>
@@ -424,7 +415,7 @@
                 <button class="btn btn-google" id="btn-google-login">
                     <i class="fa-brands fa-google" style="color: #ea4335;"></i> Sign in with Google
                 </button>
-                <p class="auth-toggle">Don't have an account? <span id="auth-mode-switch">Register Now</span></p>
+                <p class="auth-toggle" id="auth-switcher">Don't have an account? <span id="auth-mode-switch" style="color: var(--primary); cursor: pointer; font-weight: 600;">Register Now</span></p>
             </div>
         </section>
     </main>
@@ -433,31 +424,25 @@
         <p>&copy; 2026 TecSpeech Engine Integration System. Hosted on GitHub.</p>
     </footer>
 
-    <!-- Interactivity Engine Client Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // State indicators
             let isPlaying = false;
             let isLoginMode = true;
 
             // --- NAVIGATION ROUTER ---
             function showSection(sectionId) {
-                // Hide all sections
                 document.querySelectorAll('.page-section').forEach(section => {
                     section.classList.remove('active');
                 });
-                // Remove active styling from nav links
                 document.querySelectorAll('nav a').forEach(link => {
                     link.classList.remove('active');
                 });
                 
-                // Show requested section
                 const targetSection = document.getElementById(sectionId);
                 if (targetSection) {
                     targetSection.classList.add('active');
                 }
                 
-                // Set active class on navbar choice
                 const targetedNavLink = document.getElementById(`nav-${sectionId}`);
                 if (targetedNavLink) {
                     targetedNavLink.classList.add('active');
@@ -466,5 +451,18 @@
                 window.scrollTo(0, 0);
             }
 
-            // Bind click events to elements with data-target attributes
-            document.querySelectorAll('[data-target]').forEac
+            // Click Router Setup
+            document.body.addEventListener('click', (e) => {
+                const targetEl = e.target.closest('[data-target]');
+                if (targetEl) {
+                    e.preventDefault();
+                    const targetSection = targetEl.getAttribute('data-target');
+                    showSection(targetSection);
+                }
+            });
+
+            // --- ACTION SIMULATIONS ---
+            document.getElementById('btn-speak').addEventListener('click', () => alert('Processing Text Synthesis...'));
+            document.getElementById('btn-stop').addEventListener('click', () => alert('Playback Terminated.'));
+            document.getElementById('btn-premium-checkout').addEventListener('click', () => alert('Redirecting to                                                 <textarea id="tamil-text" placeholder="இங்கு தமிழ் உரையை தட்டச்சு செய்யவும் அல்லது ஒட்டவும்... (Type or paste Tamil text here)"></textarea>
+                                        
