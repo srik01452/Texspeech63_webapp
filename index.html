@@ -60,6 +60,7 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
+            cursor: pointer;
         }
 
         nav ul {
@@ -277,26 +278,26 @@
 
     <header>
         <div class="nav-container">
-            <a onclick="showSection('home')" class="logo"><i class="fa-solid fa-wand-magic-sparkles"></i> TecSpeech</a>
+            <a class="logo" data-target="home"><i class="fa-solid fa-wand-magic-sparkles"></i> TecSpeech</a>
             <nav>
                 <ul>
-                    <li><a onclick="showSection('home')" id="nav-home" class="active">Home</a></li>
-                    <li><a onclick="showSection('tts')" id="nav-tts">Dashboard</a></li>
-                    <li><a onclick="showSection('premium')" id="nav-premium">Premium</a></li>
-                    <li><a onclick="showSection('contact')" id="nav-contact">Contact</a></li>
-                    <li><button onclick="showSection('login')" class="btn btn-secondary" id="nav-login"><i class="fa-solid fa-user"></i> Login</button></li>
+                    <li><a id="nav-home" class="active" data-target="home">Home</a></li>
+                    <li><a id="nav-tts" data-target="tts">Dashboard</a></li>
+                    <li><a id="nav-premium" data-target="premium">Premium</a></li>
+                    <li><a id="nav-contact" data-target="contact">Contact</a></li>
+                    <li><button class="btn btn-secondary" id="nav-login" data-target="login"><i class="fa-solid fa-user"></i> Login</button></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main>
-        <!-- HOME PAGE / LANDING SECTON -->
+        <!-- HOME PAGE / LANDING SECTION -->
         <section id="home" class="page-section active">
             <div class="hero">
                 <h1>Transform Tamil Text & Documents into Natural Speech</h1>
                 <p>An elegant, high-fidelity English-interface tool engineered to process typed Tamil characters or document extractions with instant playback.</p>
-                <button onclick="showSection('tts')" class="btn">Get Started For Free <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn" data-target="tts">Get Started For Free <i class="fa-solid fa-arrow-right"></i></button>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
@@ -325,16 +326,16 @@
                     <h2><i class="fa-solid fa-pen-to-square" style="color: var(--primary)"></i> Tamil Text Input</h2>
                     <textarea id="tamil-text" placeholder="இங்கு தமிழ் உரையை தட்டச்சு செய்யவும் அல்லது ஒட்டவும்... (Type or paste Tamil text here)"></textarea>
                     <div class="btn-group">
-                        <button class="btn" onclick="simulateAction('Processing Text Synthesis...')"><i class="fa-solid fa-play"></i> Speak</button>
-                        <button class="btn btn-secondary btn-danger" style="color: white; border: none;" onclick="simulateAction('Playback Terminated.')"><i class="fa-solid fa-stop"></i> Stop</button>
+                        <button class="btn" id="btn-speak"><i class="fa-solid fa-play"></i> Speak</button>
+                        <button class="btn btn-secondary btn-danger" style="color: white; border: none;" id="btn-stop"><i class="fa-solid fa-stop"></i> Stop</button>
                     </div>
                 </div>
 
                 <!-- PDF Processing Module -->
                 <div class="card">
                     <h2><i class="fa-solid fa-file-arrow-up" style="color: #10b981;"></i> PDF Document Processing</h2>
-                    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
-                        <input type="file" id="file-input" accept=".pdf" style="display: none;" onchange="handleFile(this)">
+                    <div class="upload-zone" id="drop-zone">
+                        <input type="file" id="file-input" accept=".pdf" style="display: none;">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                         <h3 id="upload-status">Drop PDF here or click to browse</h3>
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Accepts structured data up to 10MB</p>
@@ -344,11 +345,11 @@
                 <!-- Shared Application Audio Engine Dashboard Component -->
                 <div class="audio-player">
                     <div class="player-controls">
-                        <button class="btn" style="background: transparent; font-size: 1.25rem; padding: 0.5rem;" onclick="togglePlay()"><i class="fa-solid fa-play" id="play-icon"></i></button>
+                        <button class="btn" style="background: transparent; font-size: 1.25rem; padding: 0.5rem;" id="btn-audio-toggle"><i class="fa-solid fa-play" id="play-icon"></i></button>
                     </div>
                     <div class="player-progress">
                         <span style="font-size: 0.85rem;" id="time-current">0:00</span>
-                        <input type="range" id="audio-seek" value="0" min="0" max="100" onchange="seekAudio(this.value)">
+                        <input type="range" id="audio-seek" value="0" min="0" max="100">
                         <span style="font-size: 0.85rem;" id="time-total">0:00</span>
                     </div>
                 </div>
@@ -369,7 +370,7 @@
                         <li><i class="fa-solid fa-check"></i> 3 PDF Uploads / day</li>
                         <li style="color: var(--text-muted);"><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> HD WaveNet Voices</li>
                     </ul>
-                    <button class="btn btn-secondary" style="width: 100%;" onclick="showSection('tts')">Current Tier</button>
+                    <button class="btn btn-secondary" style="width: 100%;" data-target="tts">Current Tier</button>
                 </div>
                 <div class="price-card premium">
                     <div class="badge">POPULAR</div>
@@ -381,7 +382,7 @@
                         <li><i class="fa-solid fa-check"></i> Uncapped PDF Document Extractions</li>
                         <li><i class="fa-solid fa-check"></i> Offline Audio Track Downloads</li>
                     </ul>
-                    <button class="btn" style="width: 100%;" onclick="simulateAction('Redirecting to checkout processing sequence...')">Upgrade to Premium</button>
+                    <button class="btn" style="width: 100%;" id="btn-premium-checkout">Upgrade to Premium</button>
                 </div>
             </div>
         </section>
@@ -390,15 +391,15 @@
         <section id="contact" class="page-section">
             <div class="card contact-container">
                 <h2><i class="fa-solid fa-envelope" style="color: var(--primary)"></i> Send Feedback & Requests</h2>
-                <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Have questions about our Tamil natural speech synthesizer rendering engine? Reach us direct at <strong>support@tecspeech.io</strong> or fill out the dashboard wireframe down below.</p>
-                <form onsubmit="event.preventDefault(); simulateAction('Feedback received. Thank you!');">
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Have questions about our Tamil natural speech synthesizer rendering engine? Reach us direct at <strong>support@tecspeech.io</strong> or fill out the form down below.</p>
+                <form id="contact-form">
                     <div class="form-group">
                         <label>Email Address</label>
                         <input type="email" placeholder="you@domain.com" required>
                     </div>
                     <div class="form-group">
                         <label>Your Message</label>
-                        <textarea style="height: 120px; margin-bottom: 0;" placeholder="Provide systemic input parameters or errors..." required></textarea>
+                        <textarea style="height: 120px; margin-bottom: 0;" placeholder="Provide feedback or point out errors..." required></textarea>
                     </div>
                     <button type="submit" class="btn" style="width: 100%; justify-content: center; margin-top: 1rem;">Submit Report</button>
                 </form>
@@ -409,7 +410,7 @@
         <section id="login" class="page-section auth-container">
             <div class="card" id="auth-card">
                 <h2 id="auth-title" style="justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem;">Access Your Account</h2>
-                <form onsubmit="event.preventDefault(); simulateAction('User authentication loop successful.'); showSection('tts');">
+                <form id="auth-form">
                     <div class="form-group">
                         <label>Email Address</label>
                         <input type="email" placeholder="name@domain.com" required>
@@ -420,35 +421,50 @@
                     </div>
                     <button type="submit" class="btn" style="width: 100%; justify-content: center;" id="auth-submit-btn">Login with Email</button>
                 </form>
-                <button class="btn btn-google" onclick="simulateAction('Redirecting to Google Secure Identity Provider...')">
+                <button class="btn btn-google" id="btn-google-login">
                     <i class="fa-brands fa-google" style="color: #ea4335;"></i> Sign in with Google
                 </button>
-                <p class="auth-toggle" id="auth-switcher">Don't have an account? <span onclick="toggleAuthMode()">Register Now</span></p>
+                <p class="auth-toggle">Don't have an account? <span id="auth-mode-switch">Register Now</span></p>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 TecSpeech Engine Integration System. Modern, responsive application layout hosted on GitHub.</p>
+        <p>&copy; 2026 TecSpeech Engine Integration System. Hosted on GitHub.</p>
     </footer>
 
     <!-- Interactivity Engine Client Scripts -->
     <script>
-        // State engine configurations
-        let isPlaying = false;
-        let isLoginMode = true;
+        document.addEventListener('DOMContentLoaded', () => {
+            // State indicators
+            let isPlaying = false;
+            let isLoginMode = true;
 
-        // Clean router navigation layout handling logic
-        function showSection(sectionId) {
-            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
-            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
-            
-            document.getElementById(sectionId).classList.add('active');
-            const targetedNavLink = document.getElementById(`nav-${sectionId}`);
-            if(targetedNavLink) targetedNavLink.classList.add('active');
-            
-            window.scrollTo(0,0);
-        }
+            // --- NAVIGATION ROUTER ---
+            function showSection(sectionId) {
+                // Hide all sections
+                document.querySelectorAll('.page-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                // Remove active styling from nav links
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Show requested section
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+                
+                // Set active class on navbar choice
+                const targetedNavLink = document.getElementById(`nav-${sectionId}`);
+                if (targetedNavLink) {
+                    targetedNavLink.classList.add('active');
+                }
+                
+                window.scrollTo(0, 0);
+            }
 
-        // Simulating background system loops dynamically
-        functio
+            // Bind click events to elements with data-target attributes
+            document.querySelectorAll('[data-target]').forEac
